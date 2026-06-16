@@ -4,118 +4,114 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-/* 🌌 宇宙状态系统 */
-const universe = {
-  calm: {
-    color: "0,220,255",
-    name: "流体平静宇宙",
-    law: "时间缓慢扩散，空间保持低频震荡"
-  },
-  anxiety: {
-    color: "255,80,160",
-    name: "信息噪声宇宙",
-    law: "信息高速传播，认知发生轻微过载"
-  },
-  tired: {
-    color: "160,160,160",
-    name: "质量坍缩宇宙",
-    law: "重力增强，时间流速下降"
-  },
-  chaos: {
-    color: "255,0,200",
-    name: "熵增崩坏宇宙",
-    law: "结构持续瓦解并随机重组"
-  }
+/* 🌌 情绪宇宙系统 */
+const world = {
+  calm: { color: "0,220,255", speed: 0.3 },
+  anxiety: { color: "255,80,160", speed: 1.5 },
+  tired: { color: "180,180,180", speed: 0.2 },
+  chaos: { color: "255,0,200", speed: 2.2 }
 };
 
 let mood = "calm";
+let mouse = { x: canvas.width/2, y: canvas.height/2 };
 
-/* 🧠 情绪切换 */
-function setMood(m) {
+/* 🧠 鼠标引力 */
+window.addEventListener("mousemove", e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+function setMood(m){
   mood = m;
 }
 
-/* 🌌 封神生成器 */
-function generateWorld() {
+/* 🌌 情绪生成器 */
+function generateWorld(){
 
   const energy = document.getElementById("energy").value;
-  const u = universe[mood];
 
   const text =
 `【宇宙生成完成】
 
-宇宙类型：${u.name}
+当前情绪：${mood}
+能量密度：${energy}
 
-运行法则：
-${u.law}
+系统状态：
+现实结构正在根据情绪参数重新编译。
 
-当前情绪能量：${energy}
-
-系统解析：
-观测者情绪正在直接影响现实结构参数，
-该宇宙处于动态生成态，而非稳定态。`;
+观测者正在影响空间本身的物理规则。`;
 
   typeWriter(text);
 }
 
-/* ✨ 打字机（高级稳定版） */
-function typeWriter(text) {
+/* ✨ 打字机 */
+function typeWriter(text){
   const el = document.getElementById("output");
   el.innerHTML = "";
-
   let i = 0;
-  function run() {
-    if (i < text.length) {
+
+  function run(){
+    if(i < text.length){
       el.innerHTML += text[i];
       i++;
-      setTimeout(run, 12);
+      setTimeout(run, 18);
     }
   }
   run();
 }
 
-/* 🌌 超流体粒子系统（封神重点） */
+/* 🌌 高级粒子系统 */
 let particles = [];
 
-for (let i = 0; i < 260; i++) {
+for(let i=0;i<320;i++){
   particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * 1.2,
-    vy: (Math.random() - 0.5) * 1.2
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    vx:(Math.random()-0.5),
+    vy:(Math.random()-0.5)
   });
 }
 
-function animate() {
+/* 🌊 动画核心 */
+function animate(){
 
-  const u = universe[mood];
+  const w = world[mood];
 
-  /* 🌫️ 宇宙残影（关键质感） */
-  ctx.fillStyle = "rgba(0,0,0,0.18)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  /* 🌑 空间残影（关键高级感） */
+  ctx.fillStyle = "rgba(0,0,0,0.08)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.fillStyle = `rgba(${u.color},0.75)`;
+  ctx.globalCompositeOperation = "lighter";
+  ctx.fillStyle = `rgba(${w.color},0.7)`;
 
-  particles.forEach(p => {
+  particles.forEach(p=>{
 
-    /* 🌊 情绪扰动场（核心封神点） */
-    const force = (Math.random() - 0.5) * 0.04;
+    /* 🧲 鼠标引力 */
+    let dx = mouse.x - p.x;
+    let dy = mouse.y - p.y;
 
-    p.vx += force;
-    p.vy += force;
+    p.vx += dx * 0.00002;
+    p.vy += dy * 0.00002;
 
-    p.x += p.vx;
-    p.y += p.vy;
+    /* 🌌 情绪扰动 */
+    p.vx += (Math.random()-0.5)*0.02;
+    p.vy += (Math.random()-0.5)*0.02;
 
-    /* 🔁 宇宙循环结构 */
-    if (p.x < 0) p.x = canvas.width;
-    if (p.x > canvas.width) p.x = 0;
-    if (p.y < 0) p.y = canvas.height;
-    if (p.y > canvas.height) p.y = 0;
+    /* 🌊 阻尼（高级关键） */
+    p.vx *= 0.96;
+    p.vy *= 0.96;
 
-    /* ✨ 粒子渲染 */
+    p.x += p.vx * w.speed;
+    p.y += p.vy * w.speed;
+
+    /* 🔁 空间循环 */
+    if(p.x<0)p.x=canvas.width;
+    if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;
+    if(p.y>canvas.height)p.y=0;
+
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 2.4, 0, Math.PI * 2);
+    ctx.arc(p.x,p.y,2.6,0,Math.PI*2);
     ctx.fill();
   });
 
