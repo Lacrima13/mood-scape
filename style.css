@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  background: #05060a;
+  color: white;
+  font-family: Arial;
+  overflow: hidden;
+}
+
+.page {
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.page.active {
+  display: flex;
+}
+
+#intro {
+  flex-direction: column;
+  text-align: center;
+}
+
+h1 {
+  font-size: 50px;
+  letter-spacing: 8px;
+  animation: glow 3s infinite;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 10px #6cf; }
+  50% { text-shadow: 0 0 40px #aaf; }
+  100% { text-shadow: 0 0 10px #6cf; }
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  background: #1f2bff;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.panel {
+  text-align: center;
+}
+
+#world {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: 1.5s;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+}

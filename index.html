@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOOD SCAPE｜Emotion Field</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="canvas"></div>
+
+<!-- INTRO -->
+<section id="intro" class="page active">
+  <h1>MOOD SCAPE</h1>
+  <p>Emotion Field Simulator</p>
+  <button onclick="start()">ENTER SYSTEM</button>
+</section>
+
+<!-- CONTROL -->
+<section id="control" class="page">
+
+  <div class="panel">
+
+    <h2>Emotion Input</h2>
+
+    <div class="moods">
+      <button onclick="setMood('calm')">Calm</button>
+      <button onclick="setMood('anxiety')">Anxiety</button>
+      <button onclick="setMood('tired')">Tired</button>
+      <button onclick="setMood('chaos')">Chaos</button>
+    </div>
+
+    <p>Energy Field</p>
+    <input type="range" min="0" max="100" id="energy"/>
+
+    <button onclick="generate()">Generate World</button>
+
+  </div>
+
+</section>
+
+<!-- ART -->
+<section id="art" class="page">
+
+  <div id="world"></div>
+
+  <div class="overlay">
+    <h2 id="title"></h2>
+    <p id="desc"></p>
+
+    <button onclick="exportArt()">Export Poster</button>
+    <button onclick="restart()">Rebuild</button>
+  </div>
+
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
