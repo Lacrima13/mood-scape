@@ -1,72 +1,59 @@
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
 
-canvas.width=innerWidth;
-canvas.height=innerHeight;
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
-const video=document.getElementById("video");
+const video = document.getElementById("video");
 
-let mood="calm";
+let mood = "neutral";
+let immersion = false;
 
-/* 🌈 AI情绪映射 */
-const emotionMap={
-happy:"calm",
-neutral:"calm",
-sad:"tired",
-angry:"chaos",
-fearful:"anxiety",
-disgusted:"chaos",
-surprised:"anxiety"
+/* 🌈 情绪映射 */
+const map = {
+happy: [0,255,200],
+sad: [120,120,255],
+angry: [255,60,120],
+neutral: [0,200,255]
 };
 
-const colorMap={
-calm:"0,220,255",
-tired:"180,180,180",
-chaos:"255,0,200",
-anxiety:"255,80,160"
-};
+/* 🎥 摄像头 */
+navigator.mediaDevices.getUserMedia({video:true})
+.then(stream=>{
+video.srcObject = stream;
+});
 
-/* 🤖 初始化摄像头 */
-async function startVideo(){
-const stream=await navigator.mediaDevices.getUserMedia({video:true});
-video.srcObject=stream;
+/* 🤖 AI模型 */
+Promise.all([
+faceapi.nets.tinyFaceDetector.loadFromUri("https://cdn.jsdelivr.net/npm/face-api.js/models"),
+faceapi.nets.faceExpressionNet.loadFromUri("https://cdn.jsdelivr.net/npm/face-api.js/models")
+]).then(startAI);
+
+async function startAI(){
+setInterval(async ()=>{
+const d = await faceapi.detectSingleFace(video,
+new faceapi.TinyFaceDetectorOptions()
+).withFaceExpressions();
+
+if(d){
+const exp = d.expressions;
+const max = Object.keys(exp).reduce((a,b)=>exp[a]>exp[b]?a:b);
+
+mood = max;
+
+document.getElementById("emotion").innerText =
+"emotion: " + mood;
+
+document.getElementById("state").innerText =
+"system reacting...";
 }
-startVideo();
-
-/* 🤖 加载AI模型 */
-async function loadAI(){
-await faceapi.nets.tinyFaceDetector.loadFromUri("https://cdn.jsdelivr.net/npm/face-api.js/models");
-await faceapi.nets.faceExpressionNet.loadFromUri("https://cdn.jsdelivr.net/npm/face-api.js/models");
-
-detect();
-}
-loadAI();
-
-/* 😶 AI识别情绪 */
-async function detect(){
-
-const detection=await faceapi
-.detectSingleFace(video,new faceapi.TinyFaceDetectorOptions())
-withFaceExpressions();
-
-if(detection){
-const expr=detection.expressions;
-const max=Math.max(...Object.values(expr));
-const emotion=Object.keys(expr).find(k=>expr[k]===max);
-
-mood=emotionMap[emotion]||"calm";
-
-document.getElementById("output").innerHTML=
-"AI情绪识别：" + emotion + " → 宇宙状态：" + mood;
+},500);
 }
 
-setTimeout(detect,500);
-}
+/* 🌌 粒子场 */
+let particles = [];
 
-/* 🌌 粒子系统 */
-let particles=[];
-
-for(let i=0;i<400;i++){
+for(let i=0;i<500;i++){
 particles.push({
 x:Math.random()*innerWidth,
 y:Math.random()*innerHeight,
@@ -75,35 +62,25 @@ vy:(Math.random()-0.5)
 });
 }
 
-let mouse={x:0,y:0};
-addEventListener("mousemove",e=>{
-mouse.x=e.clientX;
-mouse.y=e.clientY;
-});
-
-/* 🌊 渲染 */
-function animate(){
+/* 🧲 渲染 */
+function draw(){
 
 ctx.fillStyle="rgba(0,0,0,0.08)";
 ctx.fillRect(0,0,innerWidth,innerHeight);
 
 ctx.globalCompositeOperation="lighter";
 
-ctx.fillStyle=`rgba(${colorMap[mood]},0.7)`;
+const c = map[mood] || map.neutral;
+
+ctx.fillStyle=`rgba(${c[0]},${c[1]},${c[2]},0.7)`;
 
 particles.forEach(p=>{
 
-let dx=mouse.x-p.x;
-let dy=mouse.y-p.y;
+p.x += p.vx;
+p.y += p.vy;
 
-p.vx+=dx*0.00002;
-p.vy+=dy*0.00002;
-
-p.vx*=0.96;
-p.vy*=0.96;
-
-p.x+=p.vx;
-p.y+=p.vy;
+p.vx *= 0.98;
+p.vy *= 0.98;
 
 if(p.x<0)p.x=innerWidth;
 if(p.x>innerWidth)p.x=0;
@@ -111,11 +88,31 @@ if(p.y<0)p.y=innerHeight;
 if(p.y>innerHeight)p.y=0;
 
 ctx.beginPath();
-ctx.arc(p.x,p.y,2.6,0,Math.PI*2);
+ctx.arc(p.x,p.y,2.2,0,Math.PI*2);
 ctx.fill();
 });
 
-requestAnimationFrame(animate);
+requestAnimationFrame(draw);
 }
 
-animate();
+draw();
+
+/* 🌌 沉浸模式 */
+function toggleImmersion(){
+
+immersion = !immersion;
+
+document.querySelector(".ui").style.display =
+immersion ? "none" : "flex";
+
+document.querySelector(".hud").style.opacity =
+immersion ? "1" : "0.7";
+}
+
+/* ESC退出 */
+window.addEventListener("keydown",e=>{
+if(e.key==="Escape"){
+immersion=false;
+document.querySelector(".ui").style.display="flex";
+}
+});
