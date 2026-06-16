@@ -1,62 +1,88 @@
 body {
   margin: 0;
-  background: #05060a;
-  color: white;
-  font-family: Arial;
   overflow: hidden;
-}
-
-.page {
-  display: none;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-}
-
-.page.active {
-  display: flex;
-}
-
-#intro {
-  flex-direction: column;
-  text-align: center;
-}
-
-h1 {
-  font-size: 50px;
-  letter-spacing: 8px;
-  animation: glow 3s infinite;
-}
-
-@keyframes glow {
-  0% { text-shadow: 0 0 10px #6cf; }
-  50% { text-shadow: 0 0 40px #aaf; }
-  100% { text-shadow: 0 0 10px #6cf; }
-}
-
-button {
-  margin: 10px;
-  padding: 10px 20px;
-  background: #1f2bff;
-  border: none;
+  font-family: "PingFang SC", "Microsoft YaHei";
+  background: #000;
   color: white;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
-.panel {
-  text-align: center;
+/* 🌌 背景层 */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  filter: blur(0.3px) contrast(1.2);
 }
 
-#world {
+/* 🧠 中央系统 */
+.ui {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: 1.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.overlay {
-  position: absolute;
-  bottom: 50px;
-  left: 50px;
+/* 🌐 信息卡（核心展板感） */
+.panel {
+  width: 380px;
+  padding: 26px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(25px);
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  box-shadow:
+    0 0 80px rgba(0,150,255,0.15),
+    inset 0 0 30px rgba(255,255,255,0.05);
+}
+
+/* 🌈 标题系统 */
+h1 {
+  text-align: center;
+  font-size: 42px;
+  letter-spacing: 10px;
+
+  background: linear-gradient(90deg,#00c6ff,#ff00cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🧭 按钮系统 */
+button {
+  margin: 6px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  color: white;
+
+  background: rgba(120,120,255,0.25);
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.08);
+  background: rgba(120,200,255,0.5);
+}
+
+/* 🚀 主按钮（生成） */
+.main {
+  width: 100%;
+  margin-top: 12px;
+  background: linear-gradient(90deg,#00c6ff,#0072ff);
+}
+
+/* 📡 输出区（信息生成感） */
+#output {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  opacity: 0.9;
+
+  border-left: 2px solid rgba(0,200,255,0.5);
+  padding-left: 10px;
 }
