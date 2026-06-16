@@ -2,12 +2,13 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>MOOD SCAPE ∞ GOD MODE</title>
+<title>MOOD SCAPE ∞ EXHIBITION</title>
 
 <link rel="stylesheet" href="style.css">
 
-<!-- 🤖 AI人脸识别 -->
+<!-- AI -->
 <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+
 </head>
 
 <body>
@@ -16,18 +17,14 @@
 
 <video id="video" autoplay muted playsinline></video>
 
-<audio id="calmSound" loop src="calm.mp3"></audio>
-<audio id="chaosSound" loop src="chaos.mp3"></audio>
+<div class="hud">
+  <div id="emotion">loading...</div>
+  <div id="state">observer initializing</div>
+</div>
 
 <div class="ui">
-  <div class="title">
-    <h1>MOOD SCAPE ∞</h1>
-    <p>AI情绪驱动宇宙装置</p>
-  </div>
-
-  <div class="panel">
-    <div id="output">初始化AI情绪识别中...</div>
-  </div>
+  <h1>MOOD SCAPE ∞</h1>
+  <button onclick="toggleImmersion()">ENTER EXHIBITION MODE</button>
 </div>
 
 <script src="script.js"></script>
