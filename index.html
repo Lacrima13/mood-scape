@@ -1,51 +1,339 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>MOOD SCAPE ∞ ULTIMATE</title>
-
-<link rel="stylesheet" href="style.css">
-
-<!-- AI -->
-<script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>灵感急救站｜Canva可画H5互动广告</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <div class="phone-shell">
+    <main class="app">
 
-<!-- ================= COVER ================= -->
-<div id="cover" class="page active">
-  <h1>MOOD SCAPE ∞</h1>
-  <p>Emotion-driven Interactive Installation</p>
-  <button onclick="startExperience()">ENTER EXPERIENCE</button>
-</div>
+      <!-- 顶部状态栏 -->
+      <header class="topbar">
+        <div>
+          <span class="brand-dot"></span>
+          <span class="brand-name">Canva 可画</span>
+        </div>
+        <span class="page-count" id="pageCount">01 / 07</span>
+      </header>
 
-<!-- ================= INTERACTION ================= -->
-<div id="scene" class="page">
+      <!-- 页面1：开场 -->
+      <section class="screen active" id="screen-1">
+        <div class="hero-bg">
+          <div class="floating-card card-a">封面图</div>
+          <div class="floating-card card-b">信息长图</div>
+          <div class="floating-card card-c">活动海报</div>
+        </div>
 
-  <canvas id="bg"></canvas>
-  <video id="video" autoplay muted playsinline></video>
+        <div class="content center">
+          <p class="tag">AIGC × H5互动广告</p>
+          <h1>灵感急救站</h1>
+          <h2>3分钟生成你的社媒封面</h2>
+          <p class="desc">
+            距离今晚内容发布还有3小时，封面还没做？进入灵感急救站，让Canva可画帮你从空白到好看。
+          </p>
 
-  <div class="hud">
-    <div id="emotion">loading...</div>
-    <div id="direction">head: neutral</div>
+          <button class="primary-btn" onclick="goTo(2)">进入灵感急救站</button>
+          <button class="ghost-btn" onclick="showAbout()">查看作品说明</button>
+        </div>
+      </section>
 
-    <button onclick="generateReport()">GENERATE REPORT</button>
+      <!-- 页面2：身份选择 -->
+      <section class="screen" id="screen-2">
+        <div class="content">
+          <p class="tag">Step 01</p>
+          <h2>你是哪类创作者？</h2>
+          <p class="desc">选择你的身份，系统将为你推荐更贴合的创作任务。</p>
+
+          <div class="option-grid">
+            <button class="option-card" data-type="identity" data-value="企业新媒体运营">
+              <span>📢</span>
+              <strong>企业新媒体运营</strong>
+              <small>公众号、小红书、活动推广</small>
+            </button>
+
+            <button class="option-card" data-type="identity" data-value="个人博主">
+              <span>📱</span>
+              <strong>个人博主</strong>
+              <small>封面、笔记、视频头图</small>
+            </button>
+
+            <button class="option-card" data-type="identity" data-value="中小创业者">
+              <span>🛍️</span>
+              <strong>中小创业者</strong>
+              <small>产品图、宣传图、促销图</small>
+            </button>
+
+            <button class="option-card" data-type="identity" data-value="大学生创作者">
+              <span>🎓</span>
+              <strong>大学生创作者</strong>
+              <small>PPT、海报、社团活动</small>
+            </button>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="back-btn" onclick="goTo(1)">返回</button>
+            <button class="primary-btn small" onclick="nextWithCheck(3, 'identity')">下一步</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 页面3：任务选择 -->
+      <section class="screen" id="screen-3">
+        <div class="content">
+          <p class="tag">Step 02</p>
+          <h2>你今天要做什么？</h2>
+          <p class="desc">选择一个真实创作任务，模拟Canva可画的内容生成过程。</p>
+
+          <div class="task-list">
+            <button class="task-card" data-type="task" data-value="小红书封面">
+              <span>小红书封面</span>
+              <em>适合笔记、种草、干货分享</em>
+            </button>
+
+            <button class="task-card" data-type="task" data-value="公众号首图">
+              <span>公众号首图</span>
+              <em>适合推文、资讯、活动预告</em>
+            </button>
+
+            <button class="task-card" data-type="task" data-value="活动宣传海报">
+              <span>活动宣传海报</span>
+              <em>适合社团、品牌、线下活动</em>
+            </button>
+
+            <button class="task-card" data-type="task" data-value="信息长图">
+              <span>信息长图</span>
+              <em>适合知识整理、流程说明</em>
+            </button>
+
+            <button class="task-card" data-type="task" data-value="产品介绍图">
+              <span>产品介绍图</span>
+              <em>适合电商、私域、品牌宣传</em>
+            </button>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="back-btn" onclick="goTo(2)">返回</button>
+            <button class="primary-btn small" onclick="nextWithCheck(4, 'task')">下一步</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 页面4：风格选择 -->
+      <section class="screen" id="screen-4">
+        <div class="content">
+          <p class="tag">Step 03</p>
+          <h2>选择你的视觉情绪</h2>
+          <p class="desc">不会说设计术语也没关系，只需要选择你喜欢的感觉。</p>
+
+          <div class="style-grid">
+            <button class="style-card fresh" data-type="style" data-value="清新治愈">
+              <strong>清新治愈</strong>
+              <small>柔和、轻盈、干净</small>
+            </button>
+
+            <button class="style-card minimal" data-type="style" data-value="高级极简">
+              <strong>高级极简</strong>
+              <small>留白、理性、质感</small>
+            </button>
+
+            <button class="style-card pop" data-type="style" data-value="活力撞色">
+              <strong>活力撞色</strong>
+              <small>醒目、年轻、传播感</small>
+            </button>
+
+            <button class="style-card tech" data-type="style" data-value="科技商务">
+              <strong>科技商务</strong>
+              <small>专业、效率、秩序</small>
+            </button>
+
+            <button class="style-card cute" data-type="style" data-value="可爱潮流">
+              <strong>可爱潮流</strong>
+              <small>趣味、IP感、亲和力</small>
+            </button>
+
+            <button class="style-card china" data-type="style" data-value="国潮醒目">
+              <strong>国潮醒目</strong>
+              <small>文化、节奏、识别度</small>
+            </button>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="back-btn" onclick="goTo(3)">返回</button>
+            <button class="primary-btn small" onclick="nextWithCheck(5, 'style')">下一步</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 页面5：输入需求 -->
+      <section class="screen" id="screen-5">
+        <div class="content">
+          <p class="tag">Step 04</p>
+          <h2>用一句话描述你的需求</h2>
+          <p class="desc">比如：我要做一张小红书封面，主题是自律学习计划。</p>
+
+          <div class="input-box">
+            <textarea id="promptInput" placeholder="请输入你的创作需求，例如：我要做一张咖啡店新品宣传海报，风格要高级清爽。"></textarea>
+          </div>
+
+          <div class="quick-prompts">
+            <button onclick="fillPrompt('我要做一张小红书封面，主题是自律学习计划，风格清新、有吸引力。')">
+              自律学习计划
+            </button>
+            <button onclick="fillPrompt('我要做一张咖啡店新品宣传海报，突出新品上市和松弛感。')">
+              咖啡新品海报
+            </button>
+            <button onclick="fillPrompt('我要做一张社团招新活动海报，氛围年轻、有活力。')">
+              社团招新海报
+            </button>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="back-btn" onclick="goTo(4)">返回</button>
+            <button class="primary-btn small" onclick="startGenerate()">生成灵感方案</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 页面6：生成中 -->
+      <section class="screen" id="screen-6">
+        <div class="content center">
+          <div class="magic-loader">
+            <div class="magic-orb"></div>
+          </div>
+
+          <h2>正在生成灵感方案</h2>
+          <p class="desc" id="loadingText">正在分析你的创作需求……</p>
+
+          <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+
+          <ul class="loading-list">
+            <li id="load-1">分析主题关键词</li>
+            <li id="load-2">匹配Canva模板风格</li>
+            <li id="load-3">生成标题与配色建议</li>
+            <li id="load-4">优化社媒传播效果</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 页面7：结果展示 -->
+      <section class="screen" id="screen-7">
+        <div class="content">
+          <p class="tag">生成完成</p>
+          <h2>从空白到好看</h2>
+          <p class="desc">Canva可画已经为你生成一套适合发布的视觉方案。</p>
+
+          <div class="compare-box">
+            <div class="blank-design">
+              <span>空白画布</span>
+              <p>无素材 / 无灵感 / 无排版</p>
+            </div>
+
+            <div class="result-design" id="resultDesign">
+              <div class="poster-badge" id="posterBadge">小红书封面</div>
+              <h3 id="posterTitle">自律学习计划</h3>
+              <p id="posterSub">从今天开始，成为更稳定的自己</p>
+              <div class="poster-shapes">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-info">
+            <h3>AI创作建议</h3>
+            <p id="aiAdvice">
+              已为你匹配适合社媒传播的高对比标题、醒目封面构图和清晰信息层级。
+            </p>
+          </div>
+
+          <div class="tool-row">
+            <button onclick="changeResult()">换一版</button>
+            <button onclick="adjustColor()">调整配色</button>
+            <button onclick="changeTitle()">优化标题</button>
+          </div>
+
+          <div class="bottom-actions">
+            <button class="back-btn" onclick="goTo(5)">返回</button>
+            <button class="primary-btn small" onclick="showFinalCard()">保存方案</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 页面8：最终处方卡 -->
+      <section class="screen" id="screen-8">
+        <div class="content">
+          <p class="tag">你的创作处方</p>
+          <h2>灵感急救完成</h2>
+
+          <div class="prescription-card">
+            <div class="rx-title">
+              <span>Canva 可画</span>
+              <strong>创作处方卡</strong>
+            </div>
+
+            <div class="rx-row">
+              <span>创作者身份</span>
+              <strong id="finalIdentity">个人博主</strong>
+            </div>
+
+            <div class="rx-row">
+              <span>创作任务</span>
+              <strong id="finalTask">小红书封面</strong>
+            </div>
+
+            <div class="rx-row">
+              <span>推荐风格</span>
+              <strong id="finalStyle">清新治愈</strong>
+            </div>
+
+            <div class="rx-row">
+              <span>创作关键词</span>
+              <strong id="finalKeywords">高效 / 清晰 / 吸睛 / 轻松</strong>
+            </div>
+
+            <p class="rx-note">
+              你的下一张爆款封面，可以从Canva可画开始。
+            </p>
+          </div>
+
+          <div class="final-actions">
+            <button class="primary-btn" onclick="openCanva()">打开Canva可画</button>
+            <button class="ghost-btn" onclick="copySummary()">复制创作处方</button>
+            <button class="ghost-btn" onclick="restart()">重新体验</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 作品说明弹窗 -->
+      <div class="modal" id="aboutModal">
+        <div class="modal-card">
+          <button class="close-btn" onclick="closeAbout()">×</button>
+          <h2>作品说明</h2>
+          <p>
+            本作品为AIGC方向下的手机端H5互动广告设计，围绕Canva可画“赋予世界设计的力量”的品牌价值展开。
+          </p>
+          <p>
+            作品通过身份选择、任务选择、风格测试、AIGC生成模拟和结果转化，让用户体验从空白画布到完整视觉方案的创作过程。
+          </p>
+          <p>
+            使用工具建议：Google AI Studio生成文案，Figma AI生成界面原型，CODEBUDDY辅助代码实现，Canva可画完成展示图与视觉整合。
+          </p>
+        </div>
+      </div>
+
+      <!-- Toast提示 -->
+      <div class="toast" id="toast">请选择后再继续</div>
+
+    </main>
   </div>
 
-</div>
-
-<!-- ================= REPORT ================= -->
-<div id="report" class="page">
-
-  <h2>EMOTION REPORT</h2>
-  <div id="reportBox"></div>
-
-  <button onclick="backHome()">BACK</button>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
